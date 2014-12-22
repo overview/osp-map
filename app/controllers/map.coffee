@@ -1,4 +1,4 @@
 
 
 exports.index = (req, res) ->
-  console.log('map')
+  res.render('map/index')
