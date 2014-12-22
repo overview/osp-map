@@ -2,7 +2,8 @@
 
 gulp = require('gulp')
 del = require('del')
+config = require('../config').clean
 
 
 gulp.task 'clean', ->
-  del('dist')
+  del(config.dest)
