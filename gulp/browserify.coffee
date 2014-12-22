@@ -17,9 +17,10 @@ bundler = watchify(
   watchify.args
 )
 
+bundler.transform('coffeeify')
+
 bundle = () ->
   bundler
-    .transform('coffeeify')
     .bundle()
     .on('error', gutil.log.bind(gutil, 'Browserify Error'))
     .pipe(source('dist/script.js'))

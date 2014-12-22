@@ -1,3 +1,4 @@
 
 
-console.log('test')
+sum = (a, b) ->
+  a+b
