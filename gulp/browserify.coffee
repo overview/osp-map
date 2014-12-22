@@ -7,6 +7,9 @@ source = require('vinyl-source-stream')
 buffer = require('vinyl-buffer')
 watchify = require('watchify')
 browserify = require('browserify')
+argv = require('yargs').argv
+uglify = require('gulp-uglify')
+gulpif = require('gulp-if')
 
 
 bundler = watchify(
@@ -21,6 +24,7 @@ bundle = () ->
     .on('error', gutil.log.bind(gutil, 'Browserify Error'))
     .pipe(source('dist/script.js'))
     .pipe(buffer())
+    .pipe(gulpif(argv.min, uglify()))
     .pipe(sourcemaps.init({loadMaps: true}))
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('./'))
