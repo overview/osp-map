@@ -1,0 +1,27 @@
+
+
+gulp = require('gulp')
+gutil = require('gulp-util')
+sourcemaps = require('gulp-sourcemaps')
+source = require('vinyl-source-stream')
+buffer = require('vinyl-buffer')
+watchify = require('watchify')
+browserify = require('browserify')
+
+
+bundler = watchify(
+  browserify('./src/index.js'),
+  watchify.args
+)
+
+bundle = () ->
+  bundler.bundle()
+    .on('error', gutil.log.bind(gutil, 'Browserify Error'))
+    .pipe(source('dist/script.js'))
+    .pipe(buffer())
+    .pipe(sourcemaps.init({loadMaps: true}))
+    .pipe(sourcemaps.write('./'))
+    .pipe(gulp.dest('./'))
+
+gulp.task('browserify', bundle)
+bundler.on('update', bundle)
