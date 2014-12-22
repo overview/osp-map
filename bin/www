@@ -1,6 +1,6 @@
 #!/usr/bin/env coffee
 
-debug = require('debug')('osp-map');
+debug = require('debug')('osp')
 app = require('../');
 
 server = app.listen app.get('port'), ->
