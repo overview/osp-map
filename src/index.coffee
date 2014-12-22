@@ -1,4 +1,4 @@
 
 
-sum = (a, b) ->
-  a+b
+sum = (a, b, c) ->
+  a+b+c
