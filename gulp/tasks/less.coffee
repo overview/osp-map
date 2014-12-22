@@ -6,12 +6,12 @@ less = require('gulp-less')
 minify = require('gulp-minify-css')
 argv = require('yargs').argv
 gulpif = require('gulp-if')
-config = require('../config').less
+config = require('../config')
 
 
 gulp.task 'less', ->
-  gulp.src(config.src)
+  gulp.src('./public/stylesheets/index.less')
     .pipe(less())
     .pipe(gulpif(argv.min, minify()))
     .pipe(rename('style.css'))
-    .pipe(gulp.dest(config.dest))
+    .pipe(gulp.dest(config.dist))
