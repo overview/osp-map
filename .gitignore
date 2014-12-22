@@ -1,0 +1,7 @@
+node_modules
+bower_components
+
+*.pyc
+data/corpus.txt
+data/env
+data/build
