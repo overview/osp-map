@@ -16,5 +16,11 @@
   "bugs": {
     "url": "https://github.com/overview/osp-map/issues"
   },
-  "homepage": "https://github.com/overview/osp-map"
+  "homepage": "https://github.com/overview/osp-map",
+  "devDependencies": {
+    "coffee-script": "^1.8.0",
+    "gulp": "^3.8.10",
+    "gulp-less": "^2.0.1",
+    "require-dir": "^0.1.0"
+  }
 }
