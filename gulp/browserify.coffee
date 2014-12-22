@@ -10,12 +10,14 @@ browserify = require('browserify')
 
 
 bundler = watchify(
-  browserify('./src/index.js'),
+  browserify('./src/index.coffee'),
   watchify.args
 )
 
 bundle = () ->
-  bundler.bundle()
+  bundler
+    .transform('coffeeify')
+    .bundle()
     .on('error', gutil.log.bind(gutil, 'Browserify Error'))
     .pipe(source('dist/script.js'))
     .pipe(buffer())
