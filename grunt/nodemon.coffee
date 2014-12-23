@@ -7,4 +7,4 @@ module.exports =
       env:
         NODE_ENV: 'development'
         DEBUG: 'osp'
-      ignore: ['public/src/**/*']
+      ignore: ['public']

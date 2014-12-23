@@ -7,6 +7,7 @@ module.exports =
     transform: ['coffeeify']
     browserifyOptions:
       debug: true
+      extensions: '.coffee'
 
   dist:
     src: '<%= src %>/javascripts/index.coffee'

@@ -1,8 +1,11 @@
 
 
-_ = require('lodash')
+$ = require('jquery')
+Backbone = require('backbone')
+Backbone.$ = $
 
-sum = (a, b, c) ->
-  a+b+c
+Map = require('./map/map.ctl')
 
-console.log(sum(3,4,5))
+
+$ ->
+  new Map
