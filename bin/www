@@ -1,9 +1,0 @@
-#!/usr/bin/env node
-
-require('coffee-script/register');
-var debug = require('debug')('osp');
-var app = require('../');
-
-var server = app.listen(app.get('port'), function() {
-  debug('Listening on port ' + server.address().port);
-});

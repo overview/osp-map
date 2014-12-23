@@ -1,14 +1,7 @@
 
 
-express = require('express')
+debug = require('debug')('osp')
+app = require('./server')
 
-
-app = express()
-
-# Configure Express.
-require('./config/express')(app)
-
-# Register routes.
-require('./config/routes')(app)
-
-module.exports = app
+server = app.listen app.get('port'), ->
+  debug('Listening on port ' + server.address().port)
