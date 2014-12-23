@@ -26,7 +26,7 @@ module.exports = Backbone.View.extend {
     osm = new L.TileLayer(url)
 
     # Focus on NYC. TODO|dev
-    @map.setView(new L.LatLng(40.73, -73.93), 10)
+    @map.setView(new L.LatLng(40.73, -73.93), 6)
     @map.addLayer(osm)
 
 
