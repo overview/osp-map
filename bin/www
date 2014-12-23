@@ -1,7 +1,9 @@
-#!/usr/bin/env coffee
+#!/usr/bin/env node
 
-debug = require('debug')('osp')
-app = require('../')
+require('coffee-script/register');
+var debug = require('debug')('osp');
+var app = require('../');
 
-server = app.listen app.get('port'), ->
-  debug('Listening on port ' + server.address().port)
+var server = app.listen(app.get('port'), function() {
+  debug('Listening on port ' + server.address().port);
+});
