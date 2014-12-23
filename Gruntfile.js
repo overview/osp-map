@@ -1,4 +1,4 @@
 
 
 require('coffee-script/register');
-require('./gulpfile.coffee');
+require('./Gruntfile.coffee');
