@@ -1,13 +1,10 @@
 
 
-fs = require('fs')
-
-
-module.exports = (grunt, data) ->
+module.exports =
   dev:
     script: 'index.coffee'
     options:
       env:
+        NODE_ENV: 'development'
         DEBUG: 'osp'
-      callback: (nodemon) ->
-        fs.writeFileSync(data.dest+'/.rebooted')
+      ignore: ['public/src/**/*']
