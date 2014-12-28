@@ -17,5 +17,7 @@ module.exports = Controller.extend {
       process.env.OSP_API_TOKEN
     )
 
+    @overview.listObjects()
+
 
 }

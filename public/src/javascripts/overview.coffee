@@ -1,6 +1,7 @@
 
 
 $ = require('jquery')
+s = require('underscore.string')
 
 
 module.exports = class Overview
@@ -12,12 +13,19 @@ module.exports = class Overview
   @param {String} server
   @param {String} token
   """
-  constructor: (@server, @token) ->
-    console.log(@server, @token)
+  constructor: (server, @token) ->
+    @server = s.rtrim(server, '/')
+
+
+  """
+  Get the store objects URL.
+  """
+  _urlObjects: ->
+    "#{@server}/store/objects"
 
 
   """
   Get all store objects.
   """
   listObjects: ->
-    console.log('list objects')
+    console.log(@_urlObjects())
