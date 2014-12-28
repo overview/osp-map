@@ -1,15 +1,19 @@
 
 
+$ = require('jquery')
+
+
 module.exports = class Overview
 
 
   """
   Set the Overview URL and API token.
 
-  @param {String} url
+  @param {String} server
   @param {String} token
   """
-  constructor: (@url, @token) ->
+  constructor: (@server, @token) ->
+    console.log(@server, @token)
 
 
   """
