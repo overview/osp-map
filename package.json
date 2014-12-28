@@ -35,6 +35,7 @@
     "yargs": "^1.3.3"
   },
   "dependencies": {
+    "amygdala": "^0.4.2",
     "backbone": "^1.1.2",
     "bootstrap": "^3.3.1",
     "debug": "^2.1.0",
@@ -44,6 +45,7 @@
     "jquery": "^2.1.3",
     "lodash": "^2.4.1",
     "radio.controller": "^0.2.0",
+    "superagent": "^0.21.0",
     "underscore.string": "^2.4.0"
   }
 }
