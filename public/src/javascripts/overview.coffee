@@ -13,10 +13,10 @@ module.exports = class Overview
   @param {String} url
   @param {String} token
   """
-  constructor: (url, @token) ->
+  constructor: (url, token) ->
 
     # Build the Authorization header.
-    auth = 'Basic '+new Buffer(@token+':x-auth-token').toString('base64')
+    auth = 'Basic '+new Buffer(token+':x-auth-token').toString('base64')
 
     @api = new Amygdala(
 
