@@ -58,7 +58,9 @@ module.exports = Backbone.View.extend {
         lat = obj.json.Latitude
 
         # Register the marker.
-        @markers.addLayer(new L.Marker([lat, lon]))
+        marker = new L.Marker([lat, lon])
+        marker.bindPopup(obj.indexedString)
+        @markers.addLayer(marker)
 
     @map.addLayer(@markers)
 
