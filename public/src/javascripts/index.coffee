@@ -6,7 +6,7 @@ L = require('leaflet')
 Map = require('./map/map.ctl')
 
 Backbone.$ = $
-L.Icon.Default.imagePath = 'dist/images'
+L.Icon.Default.imagePath = 'dist/images/leaflet'
 
 
 $ ->
