@@ -3,6 +3,7 @@
 Backbone = require('backbone')
 L = require('leaflet')
 Overview = require('../overview')
+require('leaflet.markercluster')
 
 
 module.exports = Backbone.View.extend {
@@ -47,15 +48,19 @@ module.exports = Backbone.View.extend {
   """
   _initInstitutions: ->
 
+    @markers = new L.MarkerClusterGroup()
+
     # Load objects from Overview.
     @overview.listObjects().then (objects) =>
-      objects.forEach (obj) ->
+      objects.forEach (obj) =>
 
         lon = obj.json.Longitude
         lat = obj.json.Latitude
 
-        # Render the marker.
-        L.marker([lat, lon]).addTo(@map)
+        # Register the marker.
+        @markers.addLayer(new L.Marker([lat, lon]))
+
+    @map.addLayer(@markers)
 
 
 }

@@ -5,6 +5,7 @@ module.exports =
   options:
     paths: ['node_modules']
     sourceMap: true
+    sourceMapURL: 'style.css.map'
     outputSourceFiles: true
 
   dist:
