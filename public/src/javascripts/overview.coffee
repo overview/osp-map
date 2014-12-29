@@ -1,7 +1,6 @@
 
 
 $ = require('jquery')
-s = require('underscore.string')
 Amygdala = require('amygdala')
 
 
@@ -37,5 +36,4 @@ module.exports = class Overview
   Get all store objects.
   """
   listObjects: ->
-    @api.get('objects').then (objects) ->
-      console.log(objects)
+    @api.get('objects')
