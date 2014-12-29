@@ -8,7 +8,7 @@ module.exports = class Overview
 
 
   """
-  Set the Overview URL and API token.
+  Define a schema onto the Overview API.
 
   @param {String} url
   @param {String} token
