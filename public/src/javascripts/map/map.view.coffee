@@ -16,6 +16,7 @@ module.exports = Backbone.View.extend {
   """
   initialize: ->
 
+    # TODO: Get from URL.
     @overview = new Overview(
       process.env.OSP_API_URL,
       process.env.OSP_API_TOKEN
@@ -37,7 +38,7 @@ module.exports = Backbone.View.extend {
     url = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
     L.tileLayer(url).addTo(@map)
 
-    # Focus on NYC. TODO|dev
+    # TODO: Where to focus?
     @map.setView([40.73, -73.93], 6)
 
 
@@ -48,7 +49,13 @@ module.exports = Backbone.View.extend {
 
     # Load objects from Overview.
     @overview.listObjects().then (objects) =>
-      # TODO
+      objects.forEach (obj) ->
+
+        lon = obj.json.Longitude
+        lat = obj.json.Latitude
+
+        # Render the marker.
+        L.marker([lat, lon]).addTo(@map)
 
 
 }

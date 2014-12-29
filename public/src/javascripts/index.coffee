@@ -2,9 +2,11 @@
 
 $ = require('jquery')
 Backbone = require('backbone')
-Backbone.$ = $
-
+L = require('leaflet')
 Map = require('./map/map.ctl')
+
+Backbone.$ = $
+L.Icon.Default.imagePath = 'dist/images'
 
 
 $ ->
