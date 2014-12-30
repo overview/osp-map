@@ -22,3 +22,6 @@ module.exports = (app) ->
 
   # Set the static asset root.
   app.use(express.static(root+'/public'))
+
+  # Allow cross-origin requests.
+  app.use(require('cors')())
