@@ -12,9 +12,9 @@ module.exports = Backbone.View.extend {
   el: '#map'
 
 
-  """
-  Connect to Overview, load institutions.
-  """
+  ###
+  # Connect to Overview, load institutions.
+  ###
   initialize: ->
 
     # TODO: Get from URL.
@@ -27,9 +27,9 @@ module.exports = Backbone.View.extend {
     @_initInstitutions()
 
 
-  """
-  Spin up the Leaflet instance.
-  """
+  ###
+  # Spin up the Leaflet instance.
+  ###
   _initLeaflet: ->
 
     @map = L.map(@el)
@@ -43,9 +43,9 @@ module.exports = Backbone.View.extend {
     @map.setView([40.73, -73.93], 6)
 
 
-  """
-  Load and display institutions.
-  """
+  ###
+  # Load and display institutions.
+  ###
   _initInstitutions: ->
 
     @markers = new L.MarkerClusterGroup()

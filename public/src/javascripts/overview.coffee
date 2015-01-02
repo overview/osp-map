@@ -7,12 +7,12 @@ Amygdala = require('amygdala')
 module.exports = class Overview
 
 
-  """
-  Define a schema onto the Overview API.
-
-  @param {String} url
-  @param {String} token
-  """
+  ###
+  # Define a schema onto the Overview API.
+  #
+  # @param [String] url
+  # @param [String] token
+  ###
   constructor: (url, token) ->
 
     # Build the Authorization header.
@@ -28,12 +28,23 @@ module.exports = class Overview
       schema:
         objects:
           url: '/store/objects'
+        counts:
+          url: '/store/document-objects/count-by-object'
 
     )
 
 
-  """
-  Get all store objects.
-  """
+  ###
+  # Get all store objects.
+  ###
   listObjects: ->
     @api.get('objects')
+
+
+  ###
+  # Get document object counts.
+  #
+  # @param [Object] params
+  ###
+  listDocumentObjectCounts: (params) ->
+    @api.get('counts', params)
