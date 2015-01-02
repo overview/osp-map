@@ -5,6 +5,7 @@ Backbone = require('backbone')
 L = require('leaflet')
 Overview = require('../overview')
 require('leaflet.markercluster')
+require('leaflet.heat')
 
 
 module.exports = Backbone.View.extend {
@@ -24,6 +25,8 @@ module.exports = Backbone.View.extend {
     )
 
     @_initLeaflet()
+    @_initMarkers()
+    @_initHeatmap()
     @_initInstitutions()
     @_initFiltering()
 
@@ -45,9 +48,9 @@ module.exports = Backbone.View.extend {
 
 
   ###
-  # Load and display institutions.
+  # Initialize the marker cluster group.
   ###
-  _initInstitutions: ->
+  _initMarkers: ->
 
     @markers = new L.MarkerClusterGroup(
 
@@ -77,6 +80,19 @@ module.exports = Backbone.View.extend {
 
     @map.addLayer(@markers)
 
+
+  ###
+  # Initialize the heatmap.
+  ###
+  _initHeatmap: ->
+    @heatmap = L.heatLayer()
+
+
+  ###
+  # Load and display institutions.
+  ###
+  _initInstitutions: ->
+
     # Load objects from Overview.
     @overview.listObjects().then (objects) =>
 
@@ -87,7 +103,7 @@ module.exports = Backbone.View.extend {
         .value()
 
       # Load initial counts.
-      @updateCounts()
+      @applyParams()
 
 
   ###
@@ -97,36 +113,57 @@ module.exports = Backbone.View.extend {
 
     window.addEventListener 'message', (e) =>
       if e.data.event == 'change:documentListParams'
-        @updateCounts(e.data.args)
+        @applyParams(e.data.args)
 
 
   ###
-  # Subscribe to Overview query changes.
+  # Apply Overview query parameters.
   #
   # @params [Object] params
   ###
-  updateCounts: (params={}) ->
+  applyParams: (params={}) ->
+
+    # Load new document counts.
+    @overview.listCounts(params).then (counts) =>
+      @renderMarkers(counts)
+      @renderHeatmap(counts)
+
+
+  ###
+  # Render marker clusters.
+  #
+  # @params [Object] counts
+  ###
+  renderMarkers: (counts) ->
 
     @markers.clearLayers()
 
-    # Load syllabi counts.
-    @overview.listCounts(params).then (counts) =>
-      for id, count of counts
-        if typeof count is 'number'
+    for id, count of counts
+      if typeof count is 'number'
 
-          inst = @institutions[id]
-          lon = inst.json.Longitude
-          lat = inst.json.Latitude
+        inst = @institutions[id]
+        lon = inst.json.Longitude
+        lat = inst.json.Latitude
 
-          # Create the marker.
-          marker = new L.Marker([lat, lon], {
-            oid: inst.indexedLong
-            count: count
-          })
+        # Create the marker.
+        marker = new L.Marker([lat, lon], {
+          oid: inst.indexedLong
+          count: count
+        })
 
-          # Bind the popup, register.
-          marker.bindPopup(inst.indexedString)
-          @markers.addLayer(marker)
+        # Bind the popup, register.
+        marker.bindPopup(inst.indexedString)
+        @markers.addLayer(marker)
+
+
+  ###
+  # Render the heatmap.
+  #
+  # @params [Object] counts
+  ###
+  renderHeatmap: (counts) ->
+    console.log('renderHeatmap')
+    # TODO
 
 
 }
