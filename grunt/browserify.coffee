@@ -4,7 +4,7 @@ module.exports =
 
   options:
     watch: true
-    transform: ['coffeeify', 'envify']
+    transform: ['coffeeify']
     browserifyOptions:
       debug: true
       extensions: '.coffee'
