@@ -85,7 +85,12 @@ module.exports = Backbone.View.extend {
   # Initialize the heatmap.
   ###
   _initHeatmap: ->
-    @heatmap = L.heatLayer()
+
+    @heatmap = L.heatLayer([], {
+      minOpacity: 0.15
+    })
+
+    @map.addLayer(@heatmap)
 
 
   ###
@@ -139,21 +144,20 @@ module.exports = Backbone.View.extend {
     @markers.clearLayers()
 
     for id, count of counts
-      if typeof count is 'number'
 
-        inst = @institutions[id]
-        lon = inst.json.Longitude
-        lat = inst.json.Latitude
+      inst = @institutions[id]
+      lon = inst.json.Longitude
+      lat = inst.json.Latitude
 
-        # Create the marker.
-        marker = new L.Marker([lat, lon], {
-          oid: inst.indexedLong
-          count: count
-        })
+      # Create the marker.
+      marker = new L.Marker([lat, lon], {
+        oid: inst.indexedLong
+        count: count
+      })
 
-        # Bind the popup, register.
-        marker.bindPopup(inst.indexedString)
-        @markers.addLayer(marker)
+      # Bind the popup, register.
+      marker.bindPopup(inst.indexedString)
+      @markers.addLayer(marker)
 
 
   ###
@@ -162,8 +166,16 @@ module.exports = Backbone.View.extend {
   # @params [Object] counts
   ###
   renderHeatmap: (counts) ->
-    console.log('renderHeatmap')
-    # TODO
+
+    points = _.map counts, (count, id) =>
+
+      inst = @institutions[id]
+      lon = inst.json.Longitude
+      lat = inst.json.Latitude
+
+      L.latLng(lat, lon, count)
+
+    @heatmap.setLatLngs(points)
 
 
 }

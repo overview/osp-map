@@ -1,5 +1,6 @@
 
 
+_ = require('lodash')
 Amygdala = require('amygdala')
 
 
@@ -46,4 +47,5 @@ module.exports = class Overview
   # @param [Object] params
   ###
   listCounts: (params) ->
-    @api.get('counts', params)
+    @api.get('counts', params).then (counts) ->
+      _.omit(counts, 'getRelated')
