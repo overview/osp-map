@@ -9,9 +9,11 @@ module.exports = Controller.extend {
 
   ###
   # Start the map.
+  #
+  # @param [Object] options
   ###
-  initialize: ->
-    @view = new Map
+  initialize: (options) ->
+    @view = new Map(options)
 
 
 }

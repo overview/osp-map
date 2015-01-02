@@ -1,6 +1,5 @@
 
 
-$ = require('jquery')
 Amygdala = require('amygdala')
 
 

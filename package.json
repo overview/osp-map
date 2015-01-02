@@ -55,6 +55,7 @@
     "leaflet": "^0.7.3",
     "leaflet.markercluster": "^0.4.0",
     "lodash": "^2.4.1",
+    "querystring": "^0.2.0",
     "radio.controller": "^0.2.0"
   }
 }

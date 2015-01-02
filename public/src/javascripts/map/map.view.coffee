@@ -16,14 +16,11 @@ module.exports = Backbone.View.extend {
   ###
   # Connect to Overview, load institutions.
   ###
-  initialize: ->
+  initialize: (@options) ->
 
-    @params = {}
-
-    # TODO: Get from URL.
     @overview = new Overview(
-      process.env.OSP_API_URL,
-      process.env.OSP_API_TOKEN
+      @options.server+'/api/v1',
+      @options.apiToken
     )
 
     @_initLeaflet()
