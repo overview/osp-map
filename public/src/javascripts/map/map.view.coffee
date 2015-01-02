@@ -1,5 +1,6 @@
 
 
+_ = require('lodash')
 Backbone = require('backbone')
 L = require('leaflet')
 Overview = require('../overview')
@@ -17,6 +18,8 @@ module.exports = Backbone.View.extend {
   ###
   initialize: ->
 
+    @params = {}
+
     # TODO: Get from URL.
     @overview = new Overview(
       process.env.OSP_API_URL,
@@ -25,6 +28,7 @@ module.exports = Backbone.View.extend {
 
     @_initLeaflet()
     @_initInstitutions()
+    @_initFiltering()
 
 
   ###
@@ -52,9 +56,13 @@ module.exports = Backbone.View.extend {
 
       iconCreateFunction: (cluster) ->
 
-        count = cluster.getChildCount()
-        c = 'marker-cluster-'
+        children = cluster.getAllChildMarkers()
 
+        # Add the document counts of all the children.
+        count = _.reduce(children, ((s, m) -> s+m.options.count), 0)
+
+        # Form the class.
+        c = 'marker-cluster-'
         if count < 10
           c += 'small'
         else if count < 100
@@ -64,25 +72,63 @@ module.exports = Backbone.View.extend {
 
         new L.DivIcon(
           html: '<div><span>'+count+'</span></div>'
-          className: 'marker-cluster '+c
           iconSize: new L.Point(40, 40)
+          className: 'marker-cluster '+c
         )
 
     )
 
+    @map.addLayer(@markers)
+
     # Load objects from Overview.
     @overview.listObjects().then (objects) =>
-      objects.forEach (obj) =>
 
-        lon = obj.json.Longitude
-        lat = obj.json.Latitude
+      # Map id -> institution.
+      @institutions = {}
+      objects.forEach (inst) =>
+        @institutions[inst.id] = inst
 
-        # Register the marker.
-        marker = new L.Marker([lat, lon])
-        marker.bindPopup(obj.indexedString)
-        @markers.addLayer(marker)
+      # Load initial counts.
+      @updateCounts()
 
-    @map.addLayer(@markers)
+
+  ###
+  # Subscribe to Overview query changes.
+  ###
+  _initFiltering: ->
+
+    window.addEventListener 'message', (e) =>
+      if e.data.event == 'change:documentListParams'
+        @updateCounts(e.data.args)
+
+
+  ###
+  # Subscribe to Overview query changes.
+  #
+  # @params [Object] params
+  ###
+  updateCounts: (params={}) ->
+
+    @markers.clearLayers()
+
+    # Load syllabi counts.
+    @overview.listCounts(params).then (counts) =>
+      for id, count of counts
+        if typeof count is 'number'
+
+          inst = @institutions[id]
+          lon = inst.json.Longitude
+          lat = inst.json.Latitude
+
+          # Create the marker.
+          marker = new L.Marker([lat, lon], {
+            oid: inst.indexedLong
+            count: count
+          })
+
+          # Bind the popup, register.
+          marker.bindPopup(inst.indexedString)
+          @markers.addLayer(marker)
 
 
 }

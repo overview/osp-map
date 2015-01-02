@@ -46,5 +46,5 @@ module.exports = class Overview
   #
   # @param [Object] params
   ###
-  listDocumentObjectCounts: (params) ->
+  listCounts: (params) ->
     @api.get('counts', params)
