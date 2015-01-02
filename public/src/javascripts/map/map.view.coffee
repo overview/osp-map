@@ -84,9 +84,10 @@ module.exports = Backbone.View.extend {
     @overview.listObjects().then (objects) =>
 
       # Map id -> institution.
-      @institutions = {}
-      objects.forEach (inst) =>
-        @institutions[inst.id] = inst
+      @institutions = _(objects)
+        .pluck('id')
+        .zipObject(objects)
+        .value()
 
       # Load initial counts.
       @updateCounts()
