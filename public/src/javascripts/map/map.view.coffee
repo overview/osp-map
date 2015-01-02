@@ -48,7 +48,27 @@ module.exports = Backbone.View.extend {
   ###
   _initInstitutions: ->
 
-    @markers = new L.MarkerClusterGroup()
+    @markers = new L.MarkerClusterGroup(
+
+      iconCreateFunction: (cluster) ->
+
+        count = cluster.getChildCount()
+        c = 'marker-cluster-'
+
+        if count < 10
+          c += 'small'
+        else if count < 100
+          c += 'medium'
+        else
+          c += 'large'
+
+        new L.DivIcon(
+          html: '<div><span>'+count+'</span></div>'
+          className: 'marker-cluster '+c
+          iconSize: new L.Point(40, 40)
+        )
+
+    )
 
     # Load objects from Overview.
     @overview.listObjects().then (objects) =>
