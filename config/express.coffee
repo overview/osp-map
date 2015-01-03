@@ -10,7 +10,7 @@ module.exports = (app) ->
   env = process.env.NODE_ENV || 'development'
 
   # Assign the port.
-  app.set('port', process.env.OSP_MAP_PORT || 3000)
+  app.set('port', process.env.PORT || 3000)
 
   # Set the template directory.
   app.set('views', root+'/app/views')
