@@ -12,6 +12,9 @@ module.exports = (app) ->
   # Assign the port.
   app.set('port', process.env.PORT || 3000)
 
+  # Assign the mount path.
+  app.set('mount', process.env.MOUNT || null)
+
   # Set the template directory.
   app.set('views', root+'/app/views')
   app.set('view engine', 'jade')
