@@ -12,11 +12,8 @@ module.exports = (app) ->
   # Assign the port.
   app.set('port', process.env.PORT || 3000)
 
-  # Assign the mount path.
-  app.set('mount', process.env.MOUNT || '/')
-
   # Set the static asset root.
-  app.use(app.get('mount'), express.static(root+'/public'))
+  app.use(express.static(root+'/public'))
 
   # Set the template directory.
   app.set('views', root+'/app/views')

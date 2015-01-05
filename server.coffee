@@ -1,7 +1,6 @@
 
 
 express = require('express')
-require('express-namespace')
 
 
 app = express()
