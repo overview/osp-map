@@ -40,7 +40,7 @@ module.exports = Backbone.View.extend {
     window.map = @map
 
     # Create an OSM tile layer.
-    url = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+    url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
     L.tileLayer(url).addTo(@map)
 
     # TODO: Where to focus?
