@@ -1,0 +1,5 @@
+{
+  "name": "osp-map",
+  "exec_interpreter": "coffee",
+  "script": "index.coffee"
+}
