@@ -133,6 +133,8 @@ module.exports = Backbone.View.extend {
   ###
   filterMap: (params={}) ->
 
+    console.log(params)
+
     # Load new document counts.
     @overview.listCounts(params).then (counts) =>
       @filterMarkers(counts)
@@ -193,9 +195,16 @@ module.exports = Backbone.View.extend {
     visible = []
     @markers.eachLayer (marker) ->
       if bounds.contains(marker.getLatLng())
-        visible.push(marker)
+        visible.push(marker.options.oid)
 
-    console.log(visible.length)
+    msg = {
+      call: 'setDocumentListParams'
+      args: [{
+        objects: visible.join(),
+        name: 'visible on the map'
+      }]
+    }
 
+    window.parent.postMessage(msg, @options.server)
 
 }
