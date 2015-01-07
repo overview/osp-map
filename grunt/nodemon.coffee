@@ -2,7 +2,7 @@
 
 module.exports =
   dev:
-    script: 'index.coffee'
+    script: 'index.js'
     options:
       env:
         NODE_ENV: 'development'
