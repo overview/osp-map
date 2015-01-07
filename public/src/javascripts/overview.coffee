@@ -54,7 +54,7 @@ module.exports = class Overview
       poll = =>
         @api.get('counts', params).then (counts) =>
           console.log(counts)
-          if not _.isEmpty(counts)
+          if _.keys(counts).length > 1
             resolve(_.omit(counts, 'getRelated'))
           else
             setTimeout(poll, 500)
