@@ -47,7 +47,6 @@ module.exports = Backbone.View.extend {
     @map.setView([40.73, -73.93], 6)
 
 
-
   ###
   # Initialize the marker cluster group.
   ###
@@ -109,7 +108,7 @@ module.exports = Backbone.View.extend {
         .value()
 
       # Load initial counts.
-      @filterMap()
+      @applyParams()
 
 
   ###
@@ -117,13 +116,9 @@ module.exports = Backbone.View.extend {
   ###
   _initFiltering: ->
 
-    # OVERVIEW -> MAP
     window.addEventListener 'message', (e) =>
-      #if e.data.event == 'change:documentListParams'
-        #@filterMap(e.data.args)
-
-    # MAP -> OVERVIEW
-    @map.on('dragend zoomend', _.bind(@filterOverview, @))
+      if e.data.event == 'change:documentListParams'
+        @applyParams(e.data.args)
 
 
   ###
@@ -131,12 +126,12 @@ module.exports = Backbone.View.extend {
   #
   # @params [Object] params
   ###
-  filterMap: (params={}) ->
+  applyParams: (params={}) ->
 
     # Load new document counts.
     @overview.listCounts(params).then (counts) =>
-      @filterMarkers(counts)
-      @filterHeatmap(counts)
+      @renderMarkers(counts)
+      @renderHeatmap(counts)
 
 
   ###
@@ -144,7 +139,7 @@ module.exports = Backbone.View.extend {
   #
   # @params [Object] counts
   ###
-  filterMarkers: (counts) ->
+  renderMarkers: (counts) ->
 
     @markers.clearLayers()
 
@@ -156,7 +151,7 @@ module.exports = Backbone.View.extend {
 
       # Create the marker.
       marker = new L.Marker([lat, lon], {
-        oid: id
+        oid: inst.indexedLong
         count: count
       })
 
@@ -170,7 +165,7 @@ module.exports = Backbone.View.extend {
   #
   # @params [Object] counts
   ###
-  filterHeatmap: (counts) ->
+  renderHeatmap: (counts) ->
 
     points = _.map counts, (count, id) =>
 
@@ -182,27 +177,5 @@ module.exports = Backbone.View.extend {
 
     @heatmap.setLatLngs(points)
 
-
-  ###
-  # Filter the list of documents in Overview.
-  ###
-  filterOverview: ->
-
-    bounds = @map.getBounds()
-
-    visible = []
-    @markers.eachLayer (marker) ->
-      if bounds.contains(marker.getLatLng())
-        visible.push(marker.options.oid)
-
-    msg = {
-      call: 'setDocumentListParams'
-      args: [{
-        objects: visible.join(),
-        name: 'visible on the map'
-      }]
-    }
-
-    window.parent.postMessage(msg, @options.server)
 
 }
