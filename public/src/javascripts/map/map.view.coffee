@@ -47,6 +47,7 @@ module.exports = Backbone.View.extend {
     @map.setView([40.73, -73.93], 6)
 
 
+
   ###
   # Initialize the marker cluster group.
   ###
@@ -108,7 +109,7 @@ module.exports = Backbone.View.extend {
         .value()
 
       # Load initial counts.
-      @applyParams()
+      @filterMap()
 
 
   ###
@@ -116,9 +117,13 @@ module.exports = Backbone.View.extend {
   ###
   _initFiltering: ->
 
+    # OVERVIEW -> MAP
     window.addEventListener 'message', (e) =>
       if e.data.event == 'change:documentListParams'
-        @applyParams(e.data.args)
+        @filterMap(e.data.args)
+
+    # MAP -> OVERVIEW
+    @map.on('dragend zoomend', _.bind(@filterOverview, @))
 
 
   ###
@@ -126,12 +131,12 @@ module.exports = Backbone.View.extend {
   #
   # @params [Object] params
   ###
-  applyParams: (params={}) ->
+  filterMap: (params={}) ->
 
     # Load new document counts.
     @overview.listCounts(params).then (counts) =>
-      @renderMarkers(counts)
-      @renderHeatmap(counts)
+      @filterMarkers(counts)
+      @filterHeatmap(counts)
 
 
   ###
@@ -139,7 +144,7 @@ module.exports = Backbone.View.extend {
   #
   # @params [Object] counts
   ###
-  renderMarkers: (counts) ->
+  filterMarkers: (counts) ->
 
     @markers.clearLayers()
 
@@ -165,7 +170,7 @@ module.exports = Backbone.View.extend {
   #
   # @params [Object] counts
   ###
-  renderHeatmap: (counts) ->
+  filterHeatmap: (counts) ->
 
     points = _.map counts, (count, id) =>
 
@@ -176,6 +181,21 @@ module.exports = Backbone.View.extend {
       L.latLng(lat, lon, count)
 
     @heatmap.setLatLngs(points)
+
+
+  ###
+  # Filter the list of documents in Overview.
+  ###
+  filterOverview: ->
+
+    bounds = @map.getBounds()
+
+    visible = []
+    @markers.eachLayer (marker) ->
+      if bounds.contains(marker.getLatLng())
+        visible.push(marker)
+
+    console.log(visible.length)
 
 
 }
