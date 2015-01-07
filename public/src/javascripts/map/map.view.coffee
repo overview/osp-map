@@ -119,8 +119,8 @@ module.exports = Backbone.View.extend {
 
     # OVERVIEW -> MAP
     window.addEventListener 'message', (e) =>
-      if e.data.event == 'change:documentListParams'
-        @filterMap(e.data.args)
+      #if e.data.event == 'change:documentListParams'
+        #@filterMap(e.data.args)
 
     # MAP -> OVERVIEW
     @map.on('dragend zoomend', _.bind(@filterOverview, @))
@@ -132,8 +132,6 @@ module.exports = Backbone.View.extend {
   # @params [Object] params
   ###
   filterMap: (params={}) ->
-
-    console.log(params)
 
     # Load new document counts.
     @overview.listCounts(params).then (counts) =>
@@ -158,7 +156,7 @@ module.exports = Backbone.View.extend {
 
       # Create the marker.
       marker = new L.Marker([lat, lon], {
-        oid: inst.indexedLong
+        oid: id
         count: count
       })
 
