@@ -2,6 +2,7 @@
 
 _ = require('lodash')
 Amygdala = require('amygdala')
+Promise = require('bluebird')
 
 
 module.exports = class Overview
@@ -47,5 +48,15 @@ module.exports = class Overview
   # @param [Object] params
   ###
   listCounts: (params) ->
-    @api.get('counts', params).then (counts) ->
-      _.omit(counts, 'getRelated')
+
+    new Promise (resolve) =>
+
+      poll = =>
+        console.log('request')
+        @api.get('counts', params).then (counts) =>
+          if not _.isEmpty(counts)
+            resolve(_.omit(counts, 'getRelated'))
+          else
+            setTimeout(poll, 500)
+
+      poll()
