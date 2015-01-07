@@ -52,8 +52,8 @@ module.exports = class Overview
     new Promise (resolve) =>
 
       poll = =>
-        console.log('request')
         @api.get('counts', params).then (counts) =>
+          console.log(counts)
           if not _.isEmpty(counts)
             resolve(_.omit(counts, 'getRelated'))
           else
