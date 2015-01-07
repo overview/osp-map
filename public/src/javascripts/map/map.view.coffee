@@ -119,6 +119,7 @@ module.exports = Backbone.View.extend {
     window.addEventListener 'message', (e) =>
       if e.data.event == 'change:documentListParams'
         @applyParams(e.data.args)
+        console.log(e.data.args)
 
 
   ###
