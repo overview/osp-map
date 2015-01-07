@@ -119,11 +119,11 @@ module.exports = Backbone.View.extend {
 
     # OVERVIEW -> MAP
     window.addEventListener 'message', (e) =>
-      #if e.data.event == 'change:documentListParams'
-        #@filterMap(e.data.args)
+      if e.data.event == 'change:documentListParams'
+        @filterMap(e.data.args)
 
     # MAP -> OVERVIEW
-    @map.on('dragend zoomend', _.bind(@filterOverview, @))
+    #@map.on('dragend zoomend', _.bind(@filterOverview, @))
 
 
   ###
