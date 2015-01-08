@@ -124,8 +124,8 @@ module.exports = Backbone.View.extend {
 
     # Apply query from Overview.
     window.addEventListener 'message', (e) =>
-      if e.data.event == 'change:documentListParams'
-        if e.data.args.source is not 'osp-map'
+      if e.data.event is 'change:documentListParams'
+        if e.data.args.source? is not 'osp-map'
           @filterMap(e.data.args)
 
     # Filter docs on marker click.
