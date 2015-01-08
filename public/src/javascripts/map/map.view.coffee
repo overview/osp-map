@@ -4,6 +4,8 @@ _ = require('lodash')
 Backbone = require('backbone')
 L = require('leaflet')
 Overview = require('../overview')
+markerTpl = require('./marker.jade')
+
 require('leaflet.markercluster')
 require('leaflet.heat')
 
@@ -176,8 +178,13 @@ module.exports = Backbone.View.extend {
         count: count
       })
 
-      # Bind the popup, register.
-      marker.bindPopup(inst.indexedString)
+      popup = markerTpl({
+        institution: inst.json.Institution_Name
+        campus: inst.json.Campus_Name
+        url: inst.json.Institution_Web_Address
+      })
+
+      marker.bindPopup(popup)
       @markers.addLayer(marker)
 
 
