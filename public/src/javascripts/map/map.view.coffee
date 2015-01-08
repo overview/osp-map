@@ -61,7 +61,11 @@ module.exports = Backbone.View.extend {
         children = cluster.getAllChildMarkers()
 
         # Add the document counts of all the children.
-        count = _.reduce(children, ((s, m) -> s+m.options.count), 0)
+        count = _.reduce(
+          children,
+          ((s, m) -> s+m.options.count),
+          0
+        )
 
         # Form the class.
         c = 'marker-cluster-'
@@ -120,8 +124,8 @@ module.exports = Backbone.View.extend {
 
     # Apply query from Overview.
     window.addEventListener 'message', (e) =>
-      if e.data.event == 'change:documentListParams' and
-        e.data.args.source is not 'osp-map'
+      if e.data.event == 'change:documentListParams'
+        if e.data.args.source is not 'osp-map'
           @filterMap(e.data.args)
 
     # Filter docs on marker click.
@@ -220,7 +224,9 @@ module.exports = Backbone.View.extend {
       args: [args]
     }
 
-    window.parent.postMessage(msg, @options.server)
+    window.parent.postMessage(
+      msg, @options.server
+    )
 
 
 }
