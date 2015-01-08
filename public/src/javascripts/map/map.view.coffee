@@ -121,23 +121,16 @@ module.exports = Backbone.View.extend {
 
       opts = e.popup._source.options
 
-      msg = {
-        call: 'setDocumentListParams'
-        args: [{
-          objects: opts.oid
-          name: 'from '+opts.name
-          source: 'osp-map'
-        }]
-      }
-
-      window.parent.postMessage(msg, @options.server)
+      @_setOverviewParams({
+        objects: opts.oid
+        name: 'from '+opts.name
+      })
 
     # OVERVIEW -> MAP
     window.addEventListener 'message', (e) =>
-      src = e.data.args.source
-      evt = e.data.event
-      if evt == 'change:documentListParams' and src is not 'osp-map'
-        @filterMap(e.data.args)
+      if e.data.event == 'change:documentListParams' and
+        e.data.args.source is not 'osp-map'
+          @filterMap(e.data.args)
 
 
   ###
@@ -196,5 +189,23 @@ module.exports = Backbone.View.extend {
       L.latLng(lat, lon, count)
 
     @heatmap.setLatLngs(points)
+
+
+  ###
+  # Set the Overview document list params.
+  #
+  # @params [Object] args
+  ###
+  _setOverviewParams: (args) ->
+
+    args.source = 'osp-map'
+
+    msg = {
+      call: 'setDocumentListParams'
+      args: [args]
+    }
+
+    window.parent.postMessage(msg, @options.server)
+
 
 }
