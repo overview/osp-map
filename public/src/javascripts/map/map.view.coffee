@@ -4,6 +4,8 @@ _ = require('lodash')
 Backbone = require('backbone')
 L = require('leaflet')
 Overview = require('../overview')
+markerTpl = require('./marker.jade')
+
 require('leaflet.markercluster')
 require('leaflet.heat')
 
@@ -59,7 +61,11 @@ module.exports = Backbone.View.extend {
         children = cluster.getAllChildMarkers()
 
         # Add the document counts of all the children.
-        count = _.reduce(children, ((s, m) -> s+m.options.count), 0)
+        count = _.reduce(
+          children,
+          ((s, m) -> s+m.options.count),
+          0
+        )
 
         # Form the class.
         c = 'marker-cluster-'
@@ -116,10 +122,29 @@ module.exports = Backbone.View.extend {
   ###
   _initFiltering: ->
 
+    # Apply query from Overview.
     window.addEventListener 'message', (e) =>
-      if e.data.event == 'change:documentListParams'
-        @applyParams(e.data.args)
-        console.log(e.data.args)
+      if e.data.event is 'change:documentListParams'
+        if e.data.args.source? is not 'osp-map'
+          @filterMap(e.data.args)
+
+    # Filter docs on marker click.
+    @map.on 'popupopen', (e) =>
+
+      opts = e.popup._source.options
+
+      @_setOverviewParams({
+        objects: opts.oid
+        name: 'from '+opts.name
+      })
+
+    # Unfilter docs on marker close.
+    @map.on 'popupclose', =>
+
+      # TODO: Automatically revent to defaults?
+      @_setOverviewParams({
+        name: 'document set'
+      })
 
 
   ###
@@ -152,12 +177,18 @@ module.exports = Backbone.View.extend {
 
       # Create the marker.
       marker = new L.Marker([lat, lon], {
-        oid: inst.indexedLong
+        name: inst.indexedString
+        oid: id
         count: count
       })
 
-      # Bind the popup, register.
-      marker.bindPopup(inst.indexedString)
+      popup = markerTpl({
+        institution: inst.json.Institution_Name
+        campus: inst.json.Campus_Name
+        url: inst.json.Institution_Web_Address
+      })
+
+      marker.bindPopup(popup)
       @markers.addLayer(marker)
 
 
@@ -177,6 +208,25 @@ module.exports = Backbone.View.extend {
       L.latLng(lat, lon, count)
 
     @heatmap.setLatLngs(points)
+
+
+  ###
+  # Set the Overview document list params.
+  #
+  # @params [Object] args
+  ###
+  _setOverviewParams: (args) ->
+
+    args.source = 'osp-map'
+
+    msg = {
+      call: 'setDocumentListParams'
+      args: [args]
+    }
+
+    window.parent.postMessage(
+      msg, @options.server
+    )
 
 
 }
