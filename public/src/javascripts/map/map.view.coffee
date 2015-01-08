@@ -116,7 +116,13 @@ module.exports = Backbone.View.extend {
   ###
   _initFiltering: ->
 
-    # MAP -> OVERVIEW
+    # Apply query from Overview.
+    window.addEventListener 'message', (e) =>
+      if e.data.event == 'change:documentListParams' and
+        e.data.args.source is not 'osp-map'
+          @filterMap(e.data.args)
+
+    # Filter docs on marker click.
     @map.on 'popupopen', (e) =>
 
       opts = e.popup._source.options
@@ -126,11 +132,13 @@ module.exports = Backbone.View.extend {
         name: 'from '+opts.name
       })
 
-    # OVERVIEW -> MAP
-    window.addEventListener 'message', (e) =>
-      if e.data.event == 'change:documentListParams' and
-        e.data.args.source is not 'osp-map'
-          @filterMap(e.data.args)
+    # Unfilter docs on marker close.
+    @map.on 'popupclose', =>
+
+      # TODO: Automatically revent to defaults?
+      @_setOverviewParams({
+        name: 'document set'
+      })
 
 
   ###
