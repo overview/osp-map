@@ -119,11 +119,13 @@ module.exports = Backbone.View.extend {
     # MAP -> OVERVIEW
     @map.on 'popupopen', (e) =>
 
+      opts = e.popup._source.options
+
       msg = {
         call: 'setDocumentListParams'
         args: [{
-          name: 'from <institution>'
-          objects: e.popup._source.options.oid
+          objects: opts.oid
+          name: 'from '+opts.name
           source: 'osp-map'
         }]
       }
@@ -168,6 +170,7 @@ module.exports = Backbone.View.extend {
 
       # Create the marker.
       marker = new L.Marker([lat, lon], {
+        name: inst.indexedString
         oid: id
         count: count
       })
