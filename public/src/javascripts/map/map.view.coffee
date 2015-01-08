@@ -47,7 +47,6 @@ module.exports = Backbone.View.extend {
     @map.setView([40.73, -73.93], 6)
 
 
-
   ###
   # Initialize the marker cluster group.
   ###
@@ -117,13 +116,26 @@ module.exports = Backbone.View.extend {
   ###
   _initFiltering: ->
 
+    # MAP -> OVERVIEW
+    @map.on 'popupopen', (e) =>
+
+      msg = {
+        call: 'setDocumentListParams'
+        args: [{
+          name: 'from <institution>'
+          objects: e.popup._source.options.oid
+          source: 'osp-map'
+        }]
+      }
+
+      window.parent.postMessage(msg, @options.server)
+
     # OVERVIEW -> MAP
     window.addEventListener 'message', (e) =>
-      if e.data.event == 'change:documentListParams'
+      src = e.data.args.source
+      evt = e.data.event
+      if evt == 'change:documentListParams' and src is not 'osp-map'
         @filterMap(e.data.args)
-
-    # MAP -> OVERVIEW
-    #@map.on('dragend zoomend', _.bind(@filterOverview, @))
 
 
   ###
@@ -181,28 +193,5 @@ module.exports = Backbone.View.extend {
       L.latLng(lat, lon, count)
 
     @heatmap.setLatLngs(points)
-
-
-  ###
-  # Filter the list of documents in Overview.
-  ###
-  filterOverview: ->
-
-    bounds = @map.getBounds()
-
-    visible = []
-    @markers.eachLayer (marker) ->
-      if bounds.contains(marker.getLatLng())
-        visible.push(marker.options.oid)
-
-    msg = {
-      call: 'setDocumentListParams'
-      args: [{
-        objects: visible.join(),
-        name: 'visible on the map'
-      }]
-    }
-
-    window.parent.postMessage(msg, @options.server)
 
 }
