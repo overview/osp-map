@@ -5,6 +5,7 @@ Backbone = require('backbone')
 L = require('leaflet')
 Overview = require('../overview')
 markerTpl = require('./marker.jade')
+Qs = require('qs')
 
 require('leaflet.markercluster')
 require('leaflet.heat')
@@ -121,9 +122,17 @@ module.exports = Backbone.View.extend {
 
     # Apply query from Overview.
     window.addEventListener 'message', (e) =>
-      if e.data.event is 'notify:documentListParams'
-        if e.data.args.source? is not 'osp-map'
-          @applyParams(e.data.args)
+      switch e.data.event
+
+        # Initial query on startup.
+        when 'notify:documentListParams'
+          if e.data.args.source? is not 'osp-map'
+            @applyParams(e.data.args)
+
+        # When the query is changed.
+        when 'change:documentListParams'
+          if e.data.args.source? is not 'osp-map'
+            @applyParams(e.data.args)
 
     # Request the query params.
     @_postMessage('notifyDocumentListParams')
@@ -154,9 +163,12 @@ module.exports = Backbone.View.extend {
   ###
   applyParams: (params) ->
 
-    # TODO: Don't try to load counts for the full corpus.
-    if _.isEmpty(params)
+    # Don't try to load counts for the full corpus.
+    if params == ''
       return
+
+    # TODO: Crufty.
+    params = Qs.parse('&'+params)
 
     # Load new document counts.
     @overview.listCounts(params).then (counts) =>
