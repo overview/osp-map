@@ -113,9 +113,6 @@ module.exports = Backbone.View.extend {
         .zipObject(objects)
         .value()
 
-      # Load initial counts.
-      @applyParams()
-
 
   ###
   # Subscribe to Overview query changes.
