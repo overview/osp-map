@@ -119,9 +119,12 @@ module.exports = Backbone.View.extend {
   ###
   _initFiltering: ->
 
+    # Request the query params.
+    @_postMessage('notifyDocumentListParams')
+
     # Apply query from Overview.
     window.addEventListener 'message', (e) =>
-      if e.data.event is 'change:documentListParams'
+      if e.data.event is 'notify:documentListParams'
         if e.data.args.source? is not 'osp-map'
           @applyParams(e.data.args)
 
@@ -130,7 +133,7 @@ module.exports = Backbone.View.extend {
 
       opts = e.popup._source.options
 
-      @_setOverviewParams({
+      @_postMessage('setDocumentListParams', {
         objects: opts.oid
         name: 'from '+opts.name
       })
@@ -139,7 +142,7 @@ module.exports = Backbone.View.extend {
     @map.on 'popupclose', =>
 
       # TODO: Automatically revent to defaults?
-      @_setOverviewParams({
+      @_postMessage('setDocumentListParams', {
         name: 'document set'
       })
 
@@ -210,14 +213,15 @@ module.exports = Backbone.View.extend {
   ###
   # Set the Overview document list params.
   #
+  # @params [String] call
   # @params [Object] args
   ###
-  _setOverviewParams: (args) ->
+  _postMessage: (call, args={}) ->
 
     args.source = 'osp-map'
 
     msg = {
-      call: 'setDocumentListParams'
+      call: call
       args: [args]
     }
 
