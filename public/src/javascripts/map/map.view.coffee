@@ -119,14 +119,14 @@ module.exports = Backbone.View.extend {
   ###
   _initFiltering: ->
 
-    # Request the query params.
-    @_postMessage('notifyDocumentListParams')
-
     # Apply query from Overview.
     window.addEventListener 'message', (e) =>
       if e.data.event is 'notify:documentListParams'
         if e.data.args.source? is not 'osp-map'
           @applyParams(e.data.args)
+
+    # Request the query params.
+    @_postMessage('notifyDocumentListParams')
 
     # Filter docs on marker click.
     @map.on 'popupopen', (e) =>
@@ -152,7 +152,11 @@ module.exports = Backbone.View.extend {
   #
   # @params [Object] params
   ###
-  applyParams: (params={}) ->
+  applyParams: (params) ->
+
+    # TODO: Don't try to load counts for the full corpus.
+    if _.isEmpty(params)
+      return
 
     # Load new document counts.
     @overview.listCounts(params).then (counts) =>
