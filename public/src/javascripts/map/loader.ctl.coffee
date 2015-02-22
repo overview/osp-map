@@ -1,6 +1,13 @@
 
 
 Controller = require('radio.controller')
+NProgress = require('nprogress')
+
+
+NProgress.configure(
+  showSpinner: false,
+  trickleSpeed: 100
+)
 
 
 module.exports = Controller.extend {
@@ -16,14 +23,14 @@ module.exports = Controller.extend {
   # Start the loader.
   ###
   loadStart: ->
-    console.log('loadStart')
+    NProgress.start()
 
 
   ###
   # Stop the loader.
   ###
   loadStop: ->
-    console.log('loadStop')
+    NProgress.done()
 
 
 }
