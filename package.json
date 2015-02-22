@@ -58,7 +58,6 @@
     "leaflet.markercluster": "^0.4.0",
     "lodash": "^2.4.1",
     "qs": "^2.3.3",
-    "querystring": "^0.2.0",
     "radio.controller": "^0.2.0"
   }
 }
