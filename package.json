@@ -60,6 +60,6 @@
     "lodash": "^2.4.1",
     "nprogress": "^0.1.6",
     "qs": "^2.3.3",
-    "radio.controller": "^0.2.0"
+    "radio.controller": "^0.3.0"
   }
 }
