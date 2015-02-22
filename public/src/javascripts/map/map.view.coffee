@@ -2,10 +2,10 @@
 
 _ = require('lodash')
 Backbone = require('backbone')
+Radio = require('backbone.radio')
 L = require('leaflet')
 Overview = require('../overview')
 markerTpl = require('./marker.jade')
-Radio = require('backbone.radio')
 Qs = require('qs')
 
 require('leaflet.markercluster')
@@ -37,7 +37,7 @@ module.exports = Backbone.View.extend {
     @_initFiltering()
 
     # Start the loader.
-    @radio.trigger('loadStart', true)
+    @radio.trigger('loadStart')
 
 
   ###
@@ -135,7 +135,7 @@ module.exports = Backbone.View.extend {
       ]
 
       if e.data.event in events and e.data.args.source? is not 'osp-map'
-        @applyParams(e.data.args)
+        @applyParams(e.data.args[0])
 
     # Initial request the query params.
     @_postMessage('notifyDocumentListParams')
@@ -157,13 +157,9 @@ module.exports = Backbone.View.extend {
 
     # Load new document counts.
     @overview.listCounts(params).then (counts) =>
-
-      # Render counts.
       @renderMarkers(counts)
       @renderHeatmap(counts)
-
-      # Stop the loader.
-      @radio.trigger('loadStop', false)
+      @radio.trigger('loadStop')
 
 
   ###
