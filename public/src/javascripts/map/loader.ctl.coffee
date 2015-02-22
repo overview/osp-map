@@ -1,5 +1,6 @@
 
 
+$ = require('jquery')
 Controller = require('radio.controller')
 NProgress = require('nprogress')
 
@@ -19,11 +20,16 @@ module.exports = Controller.extend {
       loadStop: 'loadStop'
 
 
+  initialize: ->
+    @spinner = $('i.spinner')
+
+
   ###
   # Start the loader.
   ###
   loadStart: ->
     NProgress.start()
+    @spinner.show()
 
 
   ###
@@ -31,6 +37,7 @@ module.exports = Controller.extend {
   ###
   loadStop: ->
     NProgress.done()
+    @spinner.hide()
 
 
 }
