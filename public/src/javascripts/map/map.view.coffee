@@ -5,6 +5,7 @@ Backbone = require('backbone')
 L = require('leaflet')
 Overview = require('../overview')
 markerTpl = require('./marker.jade')
+Radio = require('backbone.radio')
 Qs = require('qs')
 
 require('leaflet.markercluster')
@@ -18,7 +19,7 @@ module.exports = Backbone.View.extend {
 
 
   ###
-  # Connect to Overview, load institutions.
+  # Connect to Overview, run initializers.
   ###
   initialize: (@options) ->
 
@@ -27,11 +28,16 @@ module.exports = Backbone.View.extend {
       @options.apiToken
     )
 
+    @radio = Radio.channel('map')
+
     @_initLeaflet()
     @_initMarkers()
     @_initHeatmap()
     @_initInstitutions()
     @_initFiltering()
+
+    # Start the loader.
+    @radio.trigger('loadStart', true)
 
 
   ###
@@ -151,8 +157,13 @@ module.exports = Backbone.View.extend {
 
     # Load new document counts.
     @overview.listCounts(params).then (counts) =>
+
+      # Render counts.
       @renderMarkers(counts)
       @renderHeatmap(counts)
+
+      # Stop the loader.
+      @radio.trigger('loadStop', false)
 
 
   ###
