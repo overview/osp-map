@@ -131,24 +131,6 @@ module.exports = Backbone.View.extend {
       if e.data.event in events and e.data.args.source? is not 'osp-map'
         @applyParams(e.data.args)
 
-    # Filter docs on marker click.
-    @map.on 'popupopen', (e) =>
-
-      opts = e.popup._source.options
-
-      @_postMessage('setDocumentListParams', {
-        objects: opts.oid
-        name: 'from '+opts.name
-      })
-
-    # Unfilter docs on marker close.
-    @map.on 'popupclose', =>
-
-      # TODO: Automatically revent to defaults?
-      @_postMessage('setDocumentListParams', {
-        name: 'document set'
-      })
-
     # Initial request the query params.
     @_postMessage('notifyDocumentListParams')
 
@@ -164,7 +146,7 @@ module.exports = Backbone.View.extend {
     if params == ''
       return
 
-    # TODO: Crufty.
+    # TODO: Crufty. Why isn't `params` just an object?
     params = Qs.parse('&'+params)
 
     # Load new document counts.
