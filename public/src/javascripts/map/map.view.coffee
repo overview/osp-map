@@ -122,20 +122,14 @@ module.exports = Backbone.View.extend {
 
     # Apply query from Overview.
     window.addEventListener 'message', (e) =>
-      switch e.data.event
 
-        # Initial query on startup.
-        when 'notify:documentListParams'
-          if e.data.args.source? is not 'osp-map'
-            @applyParams(e.data.args)
+      events = [
+        'notify:documentListParams',
+        'change:documentListParams'
+      ]
 
-        # When the query is changed.
-        when 'change:documentListParams'
-          if e.data.args.source? is not 'osp-map'
-            @applyParams(e.data.args)
-
-    # Request the query params.
-    @_postMessage('notifyDocumentListParams')
+      if e.data.event in events and e.data.args.source? is not 'osp-map'
+        @applyParams(e.data.args)
 
     # Filter docs on marker click.
     @map.on 'popupopen', (e) =>
@@ -154,6 +148,9 @@ module.exports = Backbone.View.extend {
       @_postMessage('setDocumentListParams', {
         name: 'document set'
       })
+
+    # Initial request the query params.
+    @_postMessage('notifyDocumentListParams')
 
 
   ###
