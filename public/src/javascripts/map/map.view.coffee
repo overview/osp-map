@@ -33,8 +33,8 @@ module.exports = Backbone.View.extend {
     @_initLeaflet()
     @_initMarkers()
     @_initHeatmap()
-    @_initInstitutions()
     @_initFiltering()
+    @_initInstitutions()
 
     # Start the loader.
     @radio.trigger('loadStart')
@@ -120,6 +120,9 @@ module.exports = Backbone.View.extend {
         .zipObject(objects)
         .value()
 
+      # Initial request the query params.
+      @_postMessage('notifyDocumentListParams')
+
 
   ###
   # Subscribe to Overview query changes.
@@ -136,9 +139,6 @@ module.exports = Backbone.View.extend {
 
       if e.data.event in events and e.data.args.source? is not 'osp-map'
         @applyParams(e.data.args[0])
-
-    # Initial request the query params.
-    @_postMessage('notifyDocumentListParams')
 
 
   ###
