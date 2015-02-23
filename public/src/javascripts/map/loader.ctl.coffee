@@ -7,7 +7,7 @@ NProgress = require('nprogress')
 
 NProgress.configure(
   showSpinner: false,
-  trickleSpeed: 100
+  trickleSpeed: 150
 )
 
 
